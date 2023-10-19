@@ -1,28 +1,22 @@
-// const http = require("http");
-import http from "node:http";
 import fs from "node:fs";
 
-const server = http.createServer();
-
-server.on("request", (req, res) => {
-  console.log(req.url, req.method, req.headers);
-
+export default function requestHandler(req, res) {
   if (req.url === "/") {
     res.setHeader("Content-Type", "text/html");
     res.write(`
-      <html>
-        <head> 
-          <title>Homepage</title>
-        </head>
-        <body>
-          <h1>Hello from my Node.js server!</h1>
-          <form action="/message" method="post">
-            <input type="text" name="message" />
-            <button type="submit">Submit</button>
-          </form>
-        </body>
-      </html>
-    `);
+          <html>
+            <head> 
+              <title>Homepage</title>
+            </head>
+            <body>
+              <h1>Hello from my Node.js server!</h1>
+              <form action="/message" method="post">
+                <input type="text" name="message" />
+                <button type="submit">Submit</button>
+              </form>
+            </body>
+          </html>
+        `);
 
     return res.end();
   }
@@ -50,6 +44,4 @@ server.on("request", (req, res) => {
 
     return res.end();
   }
-});
-
-server.listen(8000);
+}
