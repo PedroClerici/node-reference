@@ -6,8 +6,11 @@ import { products as adminProducts } from "./admin.js";
 const router = Router();
 
 router.get("/", (req, res) => {
-  console.log(adminProducts);
-  res.render("shop.pug");
+  res.render("shop.pug", {
+    products: adminProducts,
+    path: req.originalUrl,
+    pageTitle: "Shop",
+  });
 });
 
 export default router;

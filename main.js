@@ -19,7 +19,7 @@ app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
 app.use("/", (req, res) => {
-  res.render("404.pug");
+  res.render("404.pug", { pageTitle: "Page Not Found :(" });
 });
 
 app.listen(port);

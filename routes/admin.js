@@ -12,7 +12,10 @@ router.post("/product", (req, res) => {
 });
 
 router.get("/add-product", (req, res) => {
-  res.render("add-product.pug");
+  res.render("add-product.pug", {
+    path: req.originalUrl,
+    pageTitle: "Add Product",
+  });
 });
 
 export default router;
