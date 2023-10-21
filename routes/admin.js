@@ -1,3 +1,4 @@
+import path from "node:path";
 import { Router } from "express";
 
 const router = Router();
@@ -9,12 +10,7 @@ router.post("/product", (req, res) => {
 });
 
 router.get("/add-product", (req, res) => {
-  res.send(`
-    <form action="/product" method="post">
-      <input type="text" name="name" />
-      <button type="submit">Add Product</button>
-    </form>
-  `);
+  res.sendFile(path.join(path.resolve(), "views", "add-product.html"));
 });
 
 export default router;

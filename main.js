@@ -1,3 +1,5 @@
+import path from "node:path";
+
 import express from "express";
 import bodyParser from "body-parser";
 
@@ -9,12 +11,11 @@ const port = 8000;
 
 app.use("/", bodyParser.urlencoded({ extended: false }));
 
-app.use("/", (req, res, next) => {
-  console.log("This always runs!");
-  next();
-});
-
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
+
+app.use("/", (req, res) => {
+  res.sendFile(path.join(path.resolve(), "views", "404.html"));
+});
 
 app.listen(port);
