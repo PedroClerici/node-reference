@@ -9,6 +9,8 @@ import shopRoutes from "./routes/shop.js";
 const app = express();
 const port = 8000;
 
+// Serving static files
+app.use(express.static(path.join(path.resolve(), "public")));
 app.use("/", bodyParser.urlencoded({ extended: false }));
 
 app.use("/admin", adminRoutes);
