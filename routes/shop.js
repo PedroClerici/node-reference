@@ -1,16 +1,14 @@
 import path from "node:path";
 import { Router } from "express";
 
-import { products as adminProducts } from "./admin.js";
+import * as shopController from "../controllers/shop.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.render("shop.pug", {
-    products: adminProducts,
-    path: req.originalUrl,
-    pageTitle: "Shop",
-  });
-});
+router.get("/", shopController.getIndex);
+router.get("/products", shopController.getProducts);
+router.get("/orders", shopController.getOrders);
+router.get("/cart", shopController.getCart);
+router.get("/checkout", shopController.getCheckout);
 
 export default router;

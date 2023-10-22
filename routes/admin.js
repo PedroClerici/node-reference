@@ -1,21 +1,12 @@
 import path from "node:path";
 import { Router } from "express";
 
+import * as adminController from "../controllers/admin.js";
+
 const router = Router();
-export const products = [];
 
-router.post("/product", (req, res) => {
-  console.log(req.body);
-  products.push({ title: req.body.title });
-
-  res.redirect("/");
-});
-
-router.get("/add-product", (req, res) => {
-  res.render("add-product.pug", {
-    path: req.originalUrl,
-    pageTitle: "Add Product",
-  });
-});
+router.post("/add-product", adminController.postAddProducts);
+router.get("/add-product", adminController.getAddProducts);
+router.get("/products", adminController.getProducts);
 
 export default router;

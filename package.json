@@ -5,7 +5,7 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon main.js"
+    "start": "nodemon --ignore data/ main.js"
   },
   "keywords": [],
   "author": "",
