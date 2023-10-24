@@ -7,8 +7,12 @@ const router = Router();
 
 router.get("/", shopController.getIndex);
 router.get("/products", shopController.getProducts);
+router.get("/products/:id", shopController.getProductById);
 router.get("/orders", shopController.getOrders);
+router.post("/cart", shopController.postCart);
 router.get("/cart", shopController.getCart);
+router.delete("/cart", shopController.deleteCart);
+// router.delete("/cart", shopController.deleteCart);
 router.get("/checkout", shopController.getCheckout);
 
 export default router;

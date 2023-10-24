@@ -2,6 +2,7 @@ import path from "node:path";
 
 import express from "express";
 import bodyParser from "body-parser";
+import methodOverride from "method-override";
 
 import adminRoutes from "./routes/admin.js";
 import shopRoutes from "./routes/shop.js";
@@ -15,6 +16,7 @@ app.set("views", "views");
 
 app.use(express.static(path.join(path.resolve(), "public")));
 app.use("/", bodyParser.urlencoded({ extended: false }));
+app.use(methodOverride("_method"));
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
