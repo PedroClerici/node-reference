@@ -2,9 +2,9 @@ import { Product } from "../models/product.js";
 import { Cart } from "../models/cart.js";
 
 export function getProducts(req, res) {
-  Product.fetchAll((products) => {
+  Product.fetchAll().then(({ rows }) => {
     res.render("shop/products.pug", {
-      products: products,
+      products: rows,
       path: req.originalUrl,
       pageTitle: "Shop",
     });
@@ -14,7 +14,9 @@ export function getProducts(req, res) {
 export function getProductById(req, res) {
   const id = req.params.id;
 
-  Product.fetchById(id, (product) => {
+  Product.fetchById(id).then(({ rows }) => {
+    const product = rows[0];
+
     res.render("shop/product-detail.pug", {
       product: product,
       path: "/products",
@@ -24,9 +26,9 @@ export function getProductById(req, res) {
 }
 
 export function getIndex(req, res) {
-  Product.fetchAll((products) => {
+  Product.fetchAll().then(({ rows }) => {
     res.render("shop/index.pug", {
-      products: products,
+      products: rows,
       path: req.originalUrl,
       pageTitle: "Shop",
     });

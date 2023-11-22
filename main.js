@@ -7,6 +7,7 @@ import methodOverride from "method-override";
 import adminRoutes from "./routes/admin.js";
 import shopRoutes from "./routes/shop.js";
 import { get404 } from "./controllers/error.js";
+import { db } from "./utils/database.js";
 
 const app = express();
 const port = 8000;

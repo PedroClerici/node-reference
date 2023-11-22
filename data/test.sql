@@ -1,0 +1,7 @@
+CREATE TABLE books (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    imageUrl VARCHAR(255) NOT NULL,
+    price DOUBLE PRECISION NOT NULL,
+    description TEXT NOT NULL
+);

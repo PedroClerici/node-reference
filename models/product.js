@@ -3,6 +3,7 @@ import path from "node:path";
 
 import { getProductsFromFile } from "../utils/get-products.js";
 import { Cart } from "./cart.js";
+import { db } from "../utils/database.js";
 
 const filePath = path.join(path.resolve(), "data", "products.json");
 
@@ -12,61 +13,38 @@ export class Product {
     this.imageUrl = imageUrl;
     this.price = price;
     this.description = description;
-    this.id = Math.random().toString();
   }
 
   save() {
-    getProductsFromFile(filePath, (products, filePath) => {
-      const obj = {};
-      for (const property in this) {
-        obj[property] = this[property];
-      }
-
-      products.push(obj);
-
-      fs.writeFile(filePath, JSON.stringify(products), (err) => {
-        if (err) throw err;
-      });
-    });
+    return db.query(
+      'INSERT INTO products (title, "imageUrl", price, description) VALUES ($1, $2, $3, $4)',
+      [this.title, this.imageUrl, this.price, this.description]
+    );
   }
 
-  static fetchAll(callback) {
-    return getProductsFromFile(filePath, callback);
+  static fetchAll() {
+    return db.query("SELECT * FROM products");
   }
 
-  // Hint: the id should be a string!
-  static fetchById(id, callback) {
-    getProductsFromFile(filePath, (products) => {
-      callback(products.find((product) => product.id === id));
-    });
+  static fetchById(id) {
+    return db.query("SELECT * FROM products WHERE id = $1", [id]);
   }
 
   static update(product) {
-    getProductsFromFile(filePath, (products) => {
-      const updatedProductIndex = products.findIndex(
-        (oldProducts) => oldProducts.id === product.id
-      );
-
-      products[updatedProductIndex] = product;
-
-      fs.writeFile(filePath, JSON.stringify(products), (err) => {
-        if (err) throw err;
-      });
-    });
+    return db.query(
+      'UPDATE products SET title = $2, "imageUrl" = $3, price = $4, description = $5 WHERE id = $1',
+      [
+        product.id,
+        product.title,
+        product.imageUrl,
+        product.price,
+        product.description,
+      ]
+    );
   }
 
   // Hint: the id should be a string!
   static delete(id) {
-    getProductsFromFile(filePath, (products) => {
-      const product = products.find((product) => product.id === id);
-      const updatedProducts = products.filter((product) => product.id !== id);
-
-      // Delete the product also in the cart
-      Cart.deleteProduct(id, product.price);
-
-      fs.writeFile(filePath, JSON.stringify(updatedProducts), (err) => {
-        if (err) throw err;
-      });
-    });
+    db.query("DELETE FROM products WHERE id = $1", [id]);
   }
 }
