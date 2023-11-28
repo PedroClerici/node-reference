@@ -1,11 +1,13 @@
-import pg from "pg";
+import { Sequelize } from "sequelize";
 
-const pool = new pg.Pool({
+export const sequelize = new Sequelize("node_complete", "postgres", "123", {
   host: "localhost",
-  port: 5432,
-  user: "postgres",
-  database: "node_complete",
-  password: "123",
+  dialect: "postgres",
 });
 
-export const db = pool;
+try {
+  await sequelize.authenticate();
+  console.log("Connection has been established successfully.");
+} catch (error) {
+  console.error("Unable to connect to the database:", error);
+}

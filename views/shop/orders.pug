@@ -1,4 +1,19 @@
 extends ../layouts/layout.pug
 
+block styles
+  link(rel='stylesheet' href='/css/cart.css')
+
 block content
-  h1 Nothing There!
+  main
+    if orders.length > 0
+      ul
+      each order in orders
+        li
+          h1 #{order.id}
+          each product in order.products
+            li #{product.title} (#{product.orderItem.quantity})
+      //- .centered
+      //-   form(action="/order" method='POST')
+      //-     button.btn(type="submit") Order Now!
+    else
+      h1 No Orders!
