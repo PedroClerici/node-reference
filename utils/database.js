@@ -1,13 +1,26 @@
-import { Sequelize } from "sequelize";
+import { MongoClient } from "mongodb";
 
-export const sequelize = new Sequelize("node_complete", "postgres", "123", {
-  host: "localhost",
-  dialect: "postgres",
-});
+let _db;
 
-try {
-  await sequelize.authenticate();
-  console.log("Connection has been established successfully.");
-} catch (error) {
-  console.error("Unable to connect to the database:", error);
-}
+export const mongoConnect = (callback) => {
+  MongoClient.connect(
+    "mongodb+srv://hotza:CyDL07ln3IcWDfli@cluster0.fim2wqe.mongodb.net/?retryWrites=true&w=majority",
+  )
+    .then((client) => {
+      console.log("Connected");
+      callback();
+      _db = client.db("shop");
+    })
+    .catch((error) => {
+      console.log(error);
+      throw error;
+    });
+};
+
+export const getDb = () => {
+  if (!_db) {
+    throw "No database found!";
+  }
+
+  return _db;
+};

@@ -12,14 +12,19 @@ export function postProduct(req, res) {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
+  const userId = req.user._id;
 
-  req.user
-    .createProduct({
-      title: title,
-      imageUrl: imageUrl,
-      price: price,
-      description: description,
-    })
+  const product = new Product(
+    title,
+    imageUrl,
+    price,
+    description,
+    null,
+    userId,
+  );
+
+  product
+    .save()
     .then((result) => {
       // console.log(result);
       console.log("Product has been created!");
@@ -39,16 +44,9 @@ export function putProduct(req, res) {
   const description = req.body.description;
   const id = req.body.id;
 
-  req.user
-    .getProducts({ where: { id: id } })
-    .then((product) => {
-      product.title = title;
-      product.imageUrl = imageUrl;
-      product.price = price;
-      product.description = description;
-
-      return product.save();
-    })
+  const product = new Product(title, imageUrl, price, description, id);
+  product
+    .save()
     .then((result) => {
       console.log("Updated product!");
     })
@@ -62,15 +60,10 @@ export function putProduct(req, res) {
 
 export function deleteProduct(req, res) {
   const id = req.body.id;
-  // console.log(req.body);
-  req.user
-    .getProducts({ where: { id: id } })
-    .then((products) => {
-      const product = products[0];
-      return product.destroy();
-    })
+
+  Product.deleteById(id)
     .then(() => {
-      console.log("Product destroyed!");
+      console.log("Product deleted!");
     })
     .catch((err) => {
       console.log(err);
@@ -81,8 +74,7 @@ export function deleteProduct(req, res) {
 }
 
 export function getProducts(req, res) {
-  req.user
-    .getProducts()
+  Product.fetchAll()
     .then((products) => {
       res.render("admin/products.pug", {
         products: products,
@@ -97,8 +89,7 @@ export function getProducts(req, res) {
 
 export function getEditProduct(req, res) {
   const id = req.params.id;
-  res.user
-    .getProducts({ where: { id: id } })
+  Product.fetchById(id)
     .then((product) => {
       if (!product) {
         return res.redirect("/");
