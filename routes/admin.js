@@ -1,4 +1,3 @@
-import path from "node:path";
 import { Router } from "express";
 
 import * as adminController from "../controllers/admin.js";

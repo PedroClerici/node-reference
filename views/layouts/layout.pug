@@ -18,14 +18,23 @@ html(lang="en")
             a(href='/' class=(path === '/' ? 'active' : null)) Shop
           li.main-header__item
             a(href='/products' class=(path === '/products' ? 'active' : null)) Products
-          li.main-header__item
-            a(href='/orders' class=(path === '/orders' ? 'active' : null)) Orders
-          li.main-header__item
-            a(href='/cart' class=(path === '/cart' ? 'active' : null)) Cart
-          li.main-header__item
-            a(href='/admin/add-product' class=(path === '/admin/add-product' ? 'active' : null)) Add Product
-          li.main-header__item
-            a(href='/admin/products' class=(path === '/admin/products' ? 'active' : null)) Admin Products
+          if isAuthenticated
+            li.main-header__item
+              a(href='/orders' class=(path === '/orders' ? 'active' : null)) Orders
+            li.main-header__item
+              a(href='/cart' class=(path === '/cart' ? 'active' : null)) Cart
+            li.main-header__item
+              a(href='/admin/add-product' class=(path === '/admin/add-product' ? 'active' : null)) Add Product
+            li.main-header__item
+              a(href='/admin/products' class=(path === '/admin/products' ? 'active' : null)) Admin Products
+        ul.main-header__item-list
+          if isAuthenticated
+            li.main-header__item
+              form(action='/logout' method='POST')
+                button(type='submit') Logout
+          else
+            li.main-header__item
+              a(href='/login' class=(path === '/login' ? 'active' : null)) Login
 
       nav.mobile-nav
         ul.mobile-nav__item-list

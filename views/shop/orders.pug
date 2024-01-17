@@ -11,8 +11,8 @@ block content
           li.orders__item
             h1 Order - # #{order._id}
             ul.orders__products
-              each item in order.items
-                li.orders__products-item #{item.title} (#{item.quantity})
+              each product in order.products
+                li.orders__products-item #{product.product.title} (#{product.quantity}) 
       //- .centered
       //-   form(action="/order" method='POST')
       //-     button.btn(type="submit") Order Now!

@@ -1,9 +1,10 @@
-import { Product } from "../models/product.js";
+import Product from "../models/product.js";
 
 export function getAddProduct(req, res) {
   res.render("admin/add-product.pug", {
     path: req.originalUrl,
     pageTitle: "Add Product",
+    isAuthenticated: req.user,
   });
 }
 
@@ -12,16 +13,15 @@ export function postProduct(req, res) {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const userId = req.user._id;
+  const user = req.user;
 
-  const product = new Product(
-    title,
-    imageUrl,
-    price,
-    description,
-    null,
-    userId,
-  );
+  const product = new Product({
+    title: title,
+    imageUrl: imageUrl,
+    price: price,
+    description: description,
+    userId: user,
+  });
 
   product
     .save()
@@ -44,11 +44,14 @@ export function putProduct(req, res) {
   const description = req.body.description;
   const id = req.body.id;
 
-  const product = new Product(title, imageUrl, price, description, id);
-  product
-    .save()
-    .then((result) => {
-      console.log("Updated product!");
+  Product.findById(id)
+    .then((product) => {
+      product.title = title;
+      product.imageUrl = imageUrl;
+      product.price = price;
+      product.description = description;
+
+      product.save();
     })
     .catch((err) => {
       console.log(err);
@@ -61,7 +64,7 @@ export function putProduct(req, res) {
 export function deleteProduct(req, res) {
   const id = req.body.id;
 
-  Product.deleteById(id)
+  Product.findByIdAndDelete(id)
     .then(() => {
       console.log("Product deleted!");
     })
@@ -74,12 +77,13 @@ export function deleteProduct(req, res) {
 }
 
 export function getProducts(req, res) {
-  Product.fetchAll()
+  Product.find()
     .then((products) => {
       res.render("admin/products.pug", {
         products: products,
         path: req.originalUrl,
         pageTitle: "Admin Products",
+        isAuthenticated: req.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -89,7 +93,7 @@ export function getProducts(req, res) {
 
 export function getEditProduct(req, res) {
   const id = req.params.id;
-  Product.fetchById(id)
+  Product.findById(id)
     .then((product) => {
       if (!product) {
         return res.redirect("/");
